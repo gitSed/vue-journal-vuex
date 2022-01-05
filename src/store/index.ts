@@ -1,12 +1,13 @@
-import { createStore } from 'vuex'
+/** Third-Party */
+import { createStore } from "vuex";
 
-export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
+/** Own */
+import journal from "@/modules/daybook/store/journal";
+
+const store = createStore({
   modules: {
-  }
-})
+    journal,
+  },
+});
+
+export default store;
