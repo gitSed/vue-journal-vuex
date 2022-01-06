@@ -1,25 +1,27 @@
 <template>
-  <div class="entry-title d-flex justify-content-between p-2">
-    <div>
-      <span class="text-success fs-3 fw-bold">15</span>
-      <span class="mx-1 fs-3">Julio</span>
-      <span class="mx-2 fs-4 fw-light">2022, Jueves</span>
+  <template v-if="entry">
+    <div class="entry-title d-flex justify-content-between p-2">
+      <div>
+        <span class="text-success fs-3 fw-bold">{{ day }}</span>
+        <span class="mx-1 fs-3">{{ month }}</span>
+        <span class="mx-2 fs-4 fw-light">{{ yearDay }}</span>
+      </div>
+      <div>
+        <button class="btn btn-danger mx-2">
+          Borrar
+          <i class="fa fa-trash-alt"></i>
+        </button>
+        <button class="btn btn-primary">
+          Subir foto
+          <i class="fa fa-upload"></i>
+        </button>
+      </div>
     </div>
-    <div>
-      <button class="btn btn-danger mx-2">
-        Borrar
-        <i class="fa fa-trash-alt"></i>
-      </button>
-      <button class="btn btn-primary">
-        Subir foto
-        <i class="fa fa-upload"></i>
-      </button>
+    <hr />
+    <div class="d-flex flex-column px-3 h-75">
+      <textarea v-model="entry.text" placeholder="¿Qué sucedió hoy?"></textarea>
     </div>
-  </div>
-  <hr />
-  <div class="d-flex flex-column px-3 h-75">
-    <textarea placeholder="¿Qué sucedió hoy?"></textarea>
-  </div>
+  </template>
   <Fab icon="fa-save" />
   <img
     src="https://upload.wikimedia.org/wikipedia/commons/b/b2/JPEG_compression_Example.jpg"
@@ -29,12 +31,77 @@
 </template>
 
 <script lang="ts">
-  import { defineAsyncComponent } from "@vue/runtime-core";
-  export default {
+  import { defineAsyncComponent, defineComponent } from "vue";
+
+  /** Third-Party */
+  import { mapGetters } from "vuex";
+
+  /** Own */
+  import { EntryType } from "../store/journal/types";
+  import { getDayMonthYear } from "../helpers";
+  import { EntryViewDataType } from "../types";
+
+  export default defineComponent({
+    props: {
+      id: {
+        type: String,
+        required: true,
+      },
+    },
     components: {
       Fab: defineAsyncComponent(() => import("../components/Fab.vue")),
     },
-  };
+    data(): EntryViewDataType {
+      return {
+        entry: null,
+      };
+    },
+    computed: {
+      ...mapGetters("journal", ["getEntryById"]),
+      day(): number | string {
+        if (!this.entry) return "";
+
+        const { day } = getDayMonthYear(this.entry.date);
+
+        return day;
+      },
+      month() {
+        if (!this.entry) return "";
+
+        const { month } = getDayMonthYear(this.entry.date);
+
+        return month;
+      },
+      yearDay() {
+        if (!this.entry) return "";
+
+        const { year } = getDayMonthYear(this.entry.date);
+
+        return year;
+      },
+    },
+    methods: {
+      loadEntry(): EntryType | undefined {
+        const entry = this.getEntryById(this.id);
+
+        if (!entry) {
+          this.$router.push({ name: "no-entry" });
+
+          return;
+        }
+
+        this.entry = entry;
+      },
+    },
+    created() {
+      this.loadEntry();
+    },
+    watch: {
+      id() {
+        this.loadEntry();
+      },
+    },
+  });
 </script>
 
 <style lang="scss" scoped>

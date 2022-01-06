@@ -1,5 +1,5 @@
 export type EntryType = {
-  id: number;
+  id: string;
   date: string;
   text: string;
   picture: string | null;

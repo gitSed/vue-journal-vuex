@@ -23,6 +23,9 @@ const daybookRouter: RouteRecordRaw = {
         import(
           /* webpackChunkName: "daybook-entry" */ "@/modules/daybook/views/EntryView.vue"
         ),
+      props: (route) => ({
+        id: route.params.id,
+      }),
     },
   ],
 };

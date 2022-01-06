@@ -1,29 +1,58 @@
 <template>
   <div
     class="entry-container mb-3 pointer p-2"
-    @click="$router.push({ name: 'entry', params: { id: 10 } })"
+    @click="$router.push({ name: 'entry', params: { id: entry.id } })"
   >
     <div class="entry-title d-flex">
-      <span class="text-success fs-5 fw-bold">15</span>
-      <span class="mx-1 fs-5">Julio</span>
-      <span class="mx-2 fw-light">2022, Jueves</span>
+      <span class="text-success fs-5 fw-bold">{{ day }}</span>
+      <span class="mx-1 fs-5">{{ month }}</span>
+      <span class="mx-2 fw-light">{{ yearDay }}</span>
     </div>
     <div class="entry-description">
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-      Lorem Ipsum has been the industry's standard dummy text ever since the
-      1500s, when an unknown printer took a galley of type and scrambled it to
-      make a type specimen book. It has survived not only five centuries, but
-      also the leap into electronic typesetting, remaining essentially
-      unchanged. It was popularised in the 1960s with the release of Letraset
-      sheets containing Lorem Ipsum passages, and more recently with desktop
-      publishing software like Aldus PageMaker including versions of Lorem
-      Ipsum.
+      {{ shortText }}
     </div>
   </div>
 </template>
 
-<script>
-  export default {};
+<script lang="ts">
+  import { defineComponent, PropType } from "vue";
+
+  /** Own */
+  import { EntryType } from "../store/journal/types";
+  import { getDayMonthYear } from "../helpers";
+
+  export default defineComponent({
+    props: {
+      entry: {
+        type: Object as PropType<EntryType>,
+        required: true,
+      },
+    },
+    computed: {
+      shortText() {
+        const length = this.entry.text.length;
+
+        return length > 130
+          ? this.entry.text.substring(0, 130) + " ..."
+          : this.entry.text;
+      },
+      day() {
+        const { day } = getDayMonthYear(this.entry.date);
+
+        return day;
+      },
+      month() {
+        const { month } = getDayMonthYear(this.entry.date);
+
+        return month;
+      },
+      yearDay() {
+        const { year } = getDayMonthYear(this.entry.date);
+
+        return year;
+      },
+    },
+  });
 </script>
 
 <style lang="scss" scoped>

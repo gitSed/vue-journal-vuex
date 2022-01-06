@@ -11,11 +11,13 @@
 </template>
 
 <script lang="ts">
-  export default {
+  import { defineComponent } from "vue";
+
+  export default defineComponent({
     methods: {
       goToDayBook(): void {
         this.$router.push({ name: "no-entry" });
       },
     },
-  };
+  });
 </script>

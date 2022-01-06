@@ -6,12 +6,18 @@ import { JournalModule } from "./types";
 
 export const loadEntries = async ({
   commit,
-}: ActionContext<JournalModule, unknown>): Promise<void> => {};
+}: ActionContext<JournalModule, unknown>): Promise<void> => {
+  commit("");
+};
 
 export const updateEntry = async ({
   commit,
-}: ActionContext<JournalModule, unknown>): Promise<void> => {};
+}: ActionContext<JournalModule, unknown>): Promise<void> => {
+  commit("");
+};
 
 export const createEntry = async ({
   commit,
-}: ActionContext<JournalModule, unknown>): Promise<void> => {};
+}: ActionContext<JournalModule, unknown>): Promise<void> => {
+  commit("");
+};
