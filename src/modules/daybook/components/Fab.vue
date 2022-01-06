@@ -1,18 +1,25 @@
 <template>
-  <button class="btn btn-primary">
+  <button @click="onClick" class="btn btn-primary">
     <i class="fa fa-2x" :class="icon"></i>
   </button>
 </template>
 
 <script>
-  export default {
+  import { defineComponent } from "@vue/runtime-core";
+
+  export default defineComponent({
     props: {
       icon: {
         type: String,
         default: "fa-plus",
       },
     },
-  };
+    methods: {
+      onClick() {
+        this.$emit("onClick");
+      },
+    },
+  });
 </script>
 
 <style lang="scss" scoped>

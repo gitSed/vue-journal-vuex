@@ -22,7 +22,7 @@
       <textarea v-model="entry.text" placeholder="¿Qué sucedió hoy?"></textarea>
     </div>
   </template>
-  <Fab icon="fa-save" />
+  <Fab icon="fa-save" @onClick="saveEntry" />
   <img
     src="https://upload.wikimedia.org/wikipedia/commons/b/b2/JPEG_compression_Example.jpg"
     alt="entry-picture"
@@ -34,7 +34,7 @@
   import { defineAsyncComponent, defineComponent } from "vue";
 
   /** Third-Party */
-  import { mapGetters } from "vuex";
+  import { mapGetters, mapActions } from "vuex";
 
   /** Own */
   import { EntryType } from "../store/journal/types";
@@ -81,6 +81,7 @@
       },
     },
     methods: {
+      ...mapActions("journal", ["updateEntry"]),
       loadEntry(): EntryType | undefined {
         const entry = this.getEntryById(this.id);
 
@@ -91,6 +92,9 @@
         }
 
         this.entry = entry;
+      },
+      async saveEntry() {
+        this.updateEntry(this.entry);
       },
     },
     created() {
