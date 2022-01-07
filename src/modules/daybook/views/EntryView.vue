@@ -7,7 +7,11 @@
         <span class="mx-2 fs-4 fw-light">{{ yearDay }}</span>
       </div>
       <div>
-        <button class="btn btn-danger mx-2">
+        <button
+          v-if="entry?.id"
+          @click="removeEntry"
+          class="btn btn-danger mx-2"
+        >
           Borrar
           <i class="fa fa-trash-alt"></i>
         </button>
@@ -81,20 +85,44 @@
       },
     },
     methods: {
-      ...mapActions("journal", ["updateEntry"]),
+      ...mapActions("journal", ["updateEntry", "createEntry", "deleteEntry"]),
       loadEntry(): EntryType | undefined {
-        const entry = this.getEntryById(this.id);
+        let entry: EntryType;
 
-        if (!entry) {
-          this.$router.push({ name: "no-entry" });
+        if (this.id === "new") {
+          entry = {
+            id: null,
+            text: "",
+            date: new Date().toDateString(),
+            picture: null,
+          };
+        } else {
+          entry = this.getEntryById(this.id);
 
-          return;
+          if (!entry) {
+            this.$router.push({ name: "no-entry" });
+
+            return;
+          }
         }
 
         this.entry = entry;
       },
       async saveEntry() {
-        this.updateEntry(this.entry);
+        if (this.entry?.id) {
+          await this.updateEntry(this.entry);
+        } else {
+          const entryId = await this.createEntry(this.entry);
+
+          this.$router.push({ name: "entry", params: { id: entryId } });
+        }
+      },
+      async removeEntry() {
+        if (this.entry?.id) {
+          const entryId: string | null = await this.deleteEntry(this.entry.id);
+
+          if (entryId) this.$router.push({ name: "no-entry" });
+        }
       },
     },
     created() {

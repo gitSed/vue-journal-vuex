@@ -31,6 +31,6 @@ export const getDayMonthYear = (dateString: string): DayMonthYearType => {
   return {
     day: date.getDate(),
     month: months[date.getMonth()],
-    year: `${date.getFullYear()}, ${days[date.getDate()]}`,
+    year: `${date.getFullYear()}, ${days[date.getDay()]}`,
   };
 };

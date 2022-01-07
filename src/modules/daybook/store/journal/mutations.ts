@@ -27,6 +27,12 @@ export const updateEntry = (
   });
 };
 
-export const addEntry = (state: JournalModule): void => {
-  state.entries.push(state.entries[0]);
+export const addEntry = (state: JournalModule, entryObj: EntryType): void => {
+  state.entries.unshift(entryObj);
+};
+
+export const deleteEntry = (state: JournalModule, entryId: string): void => {
+  const entryIndex = state.entries.findIndex((entry) => entry.id === entryId);
+
+  state.entries.splice(entryIndex, 1);
 };

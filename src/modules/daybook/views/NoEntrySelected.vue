@@ -2,16 +2,22 @@
   <div class="d-flex justify-content-center">
     <h1 class="align-self-center">No hay nada seleccionado</h1>
   </div>
-  <Fab />
+  <Fab @onClick="goToNewEntryCreationPath" />
 </template>
 
 <script>
-  import { defineAsyncComponent } from "@vue/runtime-core";
-  export default {
+  import { defineAsyncComponent, defineComponent } from "@vue/runtime-core";
+
+  export default defineComponent({
     components: {
       Fab: defineAsyncComponent(() => import("../components/Fab.vue")),
     },
-  };
+    methods: {
+      goToNewEntryCreationPath() {
+        this.$router.push({ name: "entry", params: { id: "new" } });
+      },
+    },
+  });
 </script>
 
 <style lang="scss" scoped>
