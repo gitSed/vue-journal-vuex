@@ -1,3 +1,6 @@
+/** Third-Party */
+import axios from "axios";
+
 /** Own */
 import { DayMonthYearType } from "../types";
 
@@ -33,4 +36,26 @@ export const getDayMonthYear = (dateString: string): DayMonthYearType => {
     month: months[date.getMonth()],
     year: `${date.getFullYear()}, ${days[date.getDay()]}`,
   };
+};
+
+export const uploadImage = async (file: Blob): Promise<string | null> => {
+  if (!file) return null;
+
+  try {
+    const formData = new FormData();
+
+    formData.append("upload_preset", "vue-course");
+    formData.append("file", file);
+
+    const url = "https://api.cloudinary.com/v1_1/smooth-image-api/image/upload";
+
+    const { data } = await axios.post(url, formData);
+
+    return data.secure_url as string;
+  } catch (err) {
+    console.error("Error al cargar la imagen, revisar logs");
+    console.log(err);
+
+    return null;
+  }
 };

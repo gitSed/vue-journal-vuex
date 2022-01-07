@@ -31,6 +31,7 @@ export const updateEntry = async (
   const { status } = await journalApi.patch(`/entries/${entry.id}.json`, {
     date: entry.date,
     text: entry.text,
+    picture: entry.picture,
   });
 
   if (status === 200) {
@@ -45,6 +46,7 @@ export const createEntry = async (
   const { data } = await journalApi.post(`/entries.json`, {
     date: entry.date,
     text: entry.text,
+    picture: entry.picture,
   });
 
   const entryId = data.name;

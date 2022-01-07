@@ -8,6 +8,8 @@ export type EntryListComponentType = {
 
 export type EntryViewDataType = {
   entry: EntryType | null;
+  localImage: string | ArrayBuffer | null;
+  file: Blob | null;
 };
 
 export type DayMonthYearType = {
